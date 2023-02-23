@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.veo.codechallenge.R
+import com.veo.codechallenge.model.Movie
 
 @Composable
 @OptIn(ExperimentalMaterialApi::class)
@@ -29,11 +30,14 @@ internal fun MovieContent(
 
     val state = rememberPullRefreshState(refreshing = viewData.isLoading, onRefresh = onRefresh)
 
-    Box(modifier = Modifier.pullRefresh(state = state)) {
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .pullRefresh(state = state)
+    ) {
 
         Column(modifier = Modifier.fillMaxSize()) {
             Text(
-                text = "Blog posts",
+                text = "Movies",
                 modifier = Modifier.padding(vertical = 24.dp),
                 fontSize = 36.sp
             )
@@ -44,11 +48,12 @@ internal fun MovieContent(
             ) {
 
                 itemsIndexed(
-                    items = emptyList<Any>(),
+                    items = viewData.movies,
                     key = { _, _ ->  }
-                ) { page, movie ->
+                ) { _, movie ->
 
                     MoviePosterContent(
+                        movie = movie,
                         onDetailsClick = onDetailsClick
                     )
                 }
@@ -65,6 +70,7 @@ internal fun MovieContent(
 
 @Composable
 private fun MoviePosterContent(
+    movie: Movie,
     onDetailsClick: () -> Unit = { }
 ) {
     Card(
@@ -73,14 +79,14 @@ private fun MoviePosterContent(
     ) {
         Column {
             AsyncImage(
-                model = "",
+                model = movie.posterPath,
                 contentDescription = null
             )
 
             Column(Modifier.padding(12.dp)) {
 
                 Text(
-                    text = "title",
+                    text = movie.title,
                     fontSize = 16.sp,
                     lineHeight = 20.sp
                 )
@@ -95,7 +101,7 @@ private fun MoviePosterContent(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = "overview",
+                            text = movie.overview,
                             overflow = TextOverflow.Ellipsis,
                             fontSize = 12.sp,
                             maxLines = 1
@@ -106,7 +112,7 @@ private fun MoviePosterContent(
                             .width(1.dp))
 
                         Text(
-                            text = "release date",
+                            text = movie.releaseData,
                             fontSize = 12.sp,
                         )
                     }
@@ -121,7 +127,7 @@ private fun MoviePosterContent(
                         )
                         Icon(
                             painter = painterResource(id = R.drawable.ic_arrow_right),
-                            contentDescription = "Details about title",
+                            contentDescription = "Details about ${movie.title}",
                             tint = MaterialTheme.colors.primary
                         )
                     }
