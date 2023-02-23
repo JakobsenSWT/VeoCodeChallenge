@@ -4,11 +4,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.veo.codechallenge.request.Result.Failure
-import com.veo.codechallenge.request.Result.Success
-import com.veo.codechallenge.request.service.VeoService
-import com.veo.codechallenge.request.utils.doRequest
-import com.veo.codechallenge.request.utils.then
+import com.veo.codechallenge.repository.MovieRepository
 import com.veo.codechallenge.ui.utils.update
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class MovieViewModel @Inject constructor(
-    private val veoService: VeoService
+    private val movieRepository: MovieRepository
 ) : ViewModel() {
 
     private val mutableViewData = mutableStateOf(MovieViewData())
@@ -31,13 +27,7 @@ internal class MovieViewModel @Inject constructor(
     fun refresh() {
         viewModelScope.launch {
             mutableViewData.update { copy(isLoading = true) }
-            doRequest { veoService.movies() }
-                .then { result ->
-                    when (result) {
-                        is Success -> { mutableViewData.update { copy(movies = result.data.results, isLoading = false) } }
-                        is Failure -> { mutableViewData.update { copy(isLoading = false) } }
-                    }
-                }
+            mutableViewData.update { copy(movies = movieRepository.getMovies(), isLoading = false) }
         }
     }
 }
