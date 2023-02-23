@@ -5,6 +5,9 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import com.google.accompanist.systemuicontroller.SystemUiController
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val DarkColorPalette = darkColors(
     primary = Purple200,
@@ -36,6 +39,17 @@ fun CodeChallengeTheme(
         DarkColorPalette
     } else {
         LightColorPalette
+    }
+
+    val systemUiController: SystemUiController = rememberSystemUiController()
+
+    DisposableEffect(systemUiController, darkTheme) {
+        systemUiController.setStatusBarColor(
+            color = if (darkTheme) DarkColorPalette.surface else LightColorPalette.surface,
+            darkIcons = darkTheme.not()
+        )
+
+        onDispose {}
     }
 
     MaterialTheme(
