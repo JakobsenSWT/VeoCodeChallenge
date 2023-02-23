@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 @Composable
 internal fun MovieScreen(
     viewModel: MovieViewModel,
-    onNavigateToDetails: () -> Unit
+    onNavigateToDetails: (id: Int) -> Unit
 ) {
     val viewData by remember(viewModel) { viewModel.viewData }
 

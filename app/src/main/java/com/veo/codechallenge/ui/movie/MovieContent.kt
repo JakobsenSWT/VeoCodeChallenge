@@ -25,7 +25,7 @@ import com.veo.codechallenge.model.Movie
 internal fun MovieContent(
     viewData: MovieViewData,
     onRefresh: () -> Unit = { },
-    onDetailsClick: () -> Unit = { }
+    onDetailsClick: (id: Int) -> Unit = { }
 ) {
 
     val state = rememberPullRefreshState(refreshing = viewData.isLoading, onRefresh = onRefresh)
@@ -48,7 +48,8 @@ internal fun MovieContent(
             ) {
 
                 itemsIndexed(
-                    items = viewData.movies
+                    items = viewData.movies,
+                    key = { _, movie -> movie.id }
                 ) { _, movie ->
 
                     MoviePosterContent(
@@ -70,15 +71,15 @@ internal fun MovieContent(
 @Composable
 private fun MoviePosterContent(
     movie: Movie,
-    onDetailsClick: () -> Unit = { }
+    onDetailsClick: (id: Int) -> Unit = { }
 ) {
     Card(
-        modifier = Modifier.clickable { onDetailsClick() },
+        modifier = Modifier.clickable { onDetailsClick(movie.id) },
         shape = RoundedCornerShape(12.dp),
     ) {
         Column {
             AsyncImage(
-                model = movie.poster_path,
+                model = "https://image.tmdb.org/t/p/original/${movie.backdrop_path}",
                 contentDescription = null
             )
 
@@ -106,9 +107,7 @@ private fun MoviePosterContent(
                             maxLines = 1
                         )
 
-                        Divider(modifier = Modifier
-                            .fillMaxHeight()
-                            .width(1.dp))
+                        Divider(modifier = Modifier.fillMaxHeight().width(1.dp))
 
                         Text(
                             text = movie.release_date ?: "",

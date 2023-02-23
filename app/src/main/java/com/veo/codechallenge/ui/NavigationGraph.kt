@@ -5,7 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.veo.codechallenge.ui.movie.MovieDestination
-import com.veo.codechallenge.ui.movie.composableMovieDestination
+import com.veo.codechallenge.ui.movie.details.MovieDetailsDestination
+import com.veo.codechallenge.ui.movie.navigationMovieDestination
 
 @Composable
 fun MyAppNavHost(
@@ -16,8 +17,8 @@ fun MyAppNavHost(
         startDestination = MovieDestination.route
     ) {
 
-        composableMovieDestination(
-            // onNavigateToDetails = { navController.navigate("") }
+        navigationMovieDestination(
+            onNavigateToDetails = { navController.navigate("${MovieDetailsDestination.route}/$it") }
         )
     }
 }
