@@ -48,8 +48,7 @@ internal fun MovieContent(
             ) {
 
                 itemsIndexed(
-                    items = viewData.movies,
-                    key = { _, _ ->  }
+                    items = viewData.movies
                 ) { _, movie ->
 
                     MoviePosterContent(
@@ -79,14 +78,14 @@ private fun MoviePosterContent(
     ) {
         Column {
             AsyncImage(
-                model = movie.posterPath,
+                model = movie.poster_path,
                 contentDescription = null
             )
 
             Column(Modifier.padding(12.dp)) {
 
                 Text(
-                    text = movie.title,
+                    text = movie.title ?: movie.original_title,
                     fontSize = 16.sp,
                     lineHeight = 20.sp
                 )
@@ -101,7 +100,7 @@ private fun MoviePosterContent(
                         horizontalArrangement = Arrangement.spacedBy(4.dp)
                     ) {
                         Text(
-                            text = movie.overview,
+                            text = "Rating: ${movie.vote_average}",
                             overflow = TextOverflow.Ellipsis,
                             fontSize = 12.sp,
                             maxLines = 1
@@ -112,7 +111,7 @@ private fun MoviePosterContent(
                             .width(1.dp))
 
                         Text(
-                            text = movie.releaseData,
+                            text = movie.release_date ?: "",
                             fontSize = 12.sp,
                         )
                     }

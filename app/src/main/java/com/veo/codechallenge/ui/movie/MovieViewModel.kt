@@ -34,7 +34,7 @@ internal class MovieViewModel @Inject constructor(
             doRequest { veoService.movies() }
                 .then { result ->
                     when (result) {
-                        is Success -> { mutableViewData.update { copy(movies = result.data, isLoading = false) } }
+                        is Success -> { mutableViewData.update { copy(movies = result.data.results, isLoading = false) } }
                         is Failure -> { mutableViewData.update { copy(isLoading = false) } }
                     }
                 }

@@ -12,18 +12,18 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-
 @Module
 @InstallIn(SingletonComponent::class)
 class RetrofitModule {
 
     @Provides
+    @Suppress("JSON_FORMAT_REDUNDANT")
     fun provideRetrofit(): Retrofit =
         Retrofit.Builder()
             .baseUrl("http://example.com/")
             .addConverterFactory(
                 @OptIn(ExperimentalSerializationApi::class)
-                Json.asConverterFactory("application/json".toMediaType())
+                Json { ignoreUnknownKeys = true }.asConverterFactory("application/json".toMediaType())
             )
             .client(
                 OkHttpClient.Builder()

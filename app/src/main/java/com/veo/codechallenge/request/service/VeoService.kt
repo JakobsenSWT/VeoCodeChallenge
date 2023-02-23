@@ -1,6 +1,6 @@
 package com.veo.codechallenge.request.service
 
-import com.veo.codechallenge.model.Movie
+import com.veo.codechallenge.model.MovieResponse
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,11 +10,15 @@ import retrofit2.http.GET
 
 interface VeoService {
 
-    @GET(value = "https://api.themoviedb.org/3/trending/all/day?api_key={api_key}")
-    suspend fun movies(): List<Movie>
+    @GET(value = "https://api.themoviedb.org/3/trending/all/day?api_key=$key")
+    suspend fun movies(): MovieResponse
 
-    @GET(value = "https://api.themoviedb.org/3/movie/{movie_id}?api_key={api_key}&language=en-US")
+    @GET(value = "https://api.themoviedb.org/3/movie/{movie_id}?api_key=$$key&language=en-US")
     suspend fun details(): Any
+
+    companion object {
+        private const val key = "2b1141217ebbb8c700ded52eb2028d48"
+    }
 
 }
 
